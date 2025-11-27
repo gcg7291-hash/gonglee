@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 목록</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            background-color: #fff;
+            color: #667eea;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .question-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            flex: 1;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            color: #666;
+        }
+
+        .stats {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .stat {
+            flex: 1;
+            padding: 8px;
+            background: #e8f0fe;
+            border-radius: 8px;
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .view-btn {
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background: #764ba2;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🤔 Either Questions</h1>
+
+    <div class="button-container">
+        <a href="/questions/new" class="btn">➕ 새 질문 생성</a>
+    </div>
+
+    <div th:if="${questions.isEmpty()}" class="empty-message">
+        질문이 없습니다. 새 질문을 생성해주세요!
+    </div>
+
+    <div th:if="${!questions.isEmpty()}" class="questions-grid">
+        <div th:each="question : ${questions}" class="question-card">
+            <a th:href="@{/questions/{id}(id=${question.id})}">
+                <div class="question-title" th:text="${question.title}"></div>
+
+                <div class="options">
+                    <div class="option">
+                        <strong>A:</strong> <span th:text="${#strings.abbreviate(question.optionA, 30)}"></span>
+                    </div>
+                    <div class="option">
+                        <strong>B:</strong> <span th:text="${#strings.abbreviate(question.optionB, 30)}"></span>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        A: <span th:text="${question.countA}"></span> (<span th:text="${#numbers.formatDecimal(question.percentageA, 1, 1)}"></span>%)
+                    </div>
+                    <div class="stat">
+                        B: <span th:text="${question.countB}"></span> (<span th:text="${#numbers.formatDecimal(question.percentageB, 1, 1)}"></span>%)
+                    </div>
+                </div>
+            </a>
+
+            <button class="view-btn" onclick="location.href='/questions/' + this.closest('.question-card').querySelector('a').href.split('/').pop()">
+                자세히 보기
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

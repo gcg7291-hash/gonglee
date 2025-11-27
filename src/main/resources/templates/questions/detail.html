@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 상세</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .option-label {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .option-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            word-break: break-word;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            transition: width 0.3s ease;
+        }
+
+        .vote-count {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .answer-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .answer-form h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .total-votes {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a href="/questions" class="back-btn">← 목록으로 돌아가기</a>
+        <h1 th:text="${question.title}"></h1>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="option-label">A</div>
+            <div class="option-text" th:text="${question.optionA}"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" th:style="'width: ' + ${question.percentageA} + '%'">
+                    <span th:text="${#numbers.formatDecimal(question.percentageA, 1, 1)} + '%'"></span>
+                </div>
+            </div>
+            <div class="vote-count" th:text="${question.countA} + ' 표'"></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="option-label">B</div>
+            <div class="option-text" th:text="${question.optionB}"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" th:style="'width: ' + ${question.percentageB} + '%'">
+                    <span th:text="${#numbers.formatDecimal(question.percentageB, 1, 1)} + '%'"></span>
+                </div>
+            </div>
+            <div class="vote-count" th:text="${question.countB} + ' 표'"></div>
+        </div>
+    </div>
+
+    <div class="answer-form">
+        <h2>📝 당신의 답변</h2>
+
+        <form th:action="@{/questions/{id}/answers(id=${question.id})}" method="POST">
+            <div class="form-group">
+                <label for="answerText">선택지 선택</label>
+                <select id="answerText" name="answerText" required>
+                    <option value="">-- 선택하세요 --</option>
+                    <option value="A">A: <span th:text="${question.optionA}"></span></option>
+                    <option value="B">B: <span th:text="${question.optionB}"></span></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="content">의견 (선택사항)</label>
+                <textarea id="content" name="content" placeholder="당신의 의견을 적어주세요 (최대 500글자)"></textarea>
+            </div>
+
+            <button type="submit">✅ 답변 제출</button>
+        </form>
+    </div>
+
+    <div class="total-votes">
+        총 <strong th:text="${question.totalCount}"></strong>명이 참여했습니다
+    </div>
+</div>
+</body>
+</html>
