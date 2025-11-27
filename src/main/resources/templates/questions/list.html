@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>질문 목록</title>
+    <title>질문 목록 | gonglee A/B</title>
     <style>
+        :root {
+            /* 로고에서 영감을 받은 따뜻한 베이지/골드 색상 */
+            --primary-color: #A68B5E;
+            /* 은은한 배경색 (Off-white/Light Gray) */
+            --background-color: #F8F8F8;
+            /* 깨끗한 카드 배경색 */
+            --card-background: #FFFFFF;
+            /* 얇은 선 색상 */
+            --border-color: #E0E0E0;
+            /* 텍스트 색상 */
+            --text-color: #333333;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,66 +26,101 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--background-color);
             min-height: 100vh;
+            color: var(--text-color);
             padding: 40px 20px;
         }
+
+        /* --- 네비게이션 바 (Stitch 요구사항 반영) --- */
+        .header-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-background);
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .header-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.2s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+        .header-nav a:hover, .header-nav a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        /* --- /네비게이션 바 --- */
 
         .container {
             max-width: 900px;
             margin: 0 auto;
+            /* 네비게이션 높이 고려 */
+            padding-top: 80px;
         }
 
         h1 {
-            color: white;
+            color: var(--primary-color);
             text-align: center;
             margin-bottom: 40px;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 300; /* 얇은 선 무드 */
         }
 
         .button-container {
-            text-align: center;
+            text-align: right; /* 새 질문 생성 버튼 오른쪽 정렬 */
             margin-bottom: 40px;
         }
 
         .btn {
-            background-color: #fff;
-            color: #667eea;
-            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 25px;
             border: none;
-            border-radius: 25px;
+            border-radius: 4px; /* 날카로운 모서리 */
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 500;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(166, 139, 94, 0.4);
         }
 
         .questions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
 
         .question-card {
-            background: white;
-            border-radius: 15px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color); /* 얇은 선 */
+            border-radius: 4px; /* 날카로운 모서리 */
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            /* 은은한 그림자 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
         .question-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color); /* 호버 시 강조 */
         }
 
         .question-card a {
@@ -81,107 +129,159 @@
         }
 
         .question-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
             margin-bottom: 15px;
+            line-height: 1.4;
         }
 
         .options {
             display: flex;
-            gap: 10px;
+            gap: 15px; /* 간격 늘림 */
             margin-bottom: 15px;
         }
 
         .option {
             flex: 1;
             padding: 10px;
-            background: #f5f5f5;
-            border-radius: 8px;
-            font-size: 13px;
+            background: #F4F4F4; /* 뉴트럴 배경 */
+            border-radius: 4px;
+            font-size: 14px;
             text-align: center;
+            color: #666;
+            border: 1px solid var(--border-color);
+        }
+
+        /* A/B 강조 */
+        .option strong {
+            color: var(--primary-color);
+        }
+
+        .stats-container {
+            /* 투표 비율을 시각적으로 보여주는 막대 그래프 */
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 8px; /* 얇은 막대 */
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .progress-fill-a {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        /* B 막대는 A 막대의 나머지 부분 (필요하다면 다른 색상으로 구분 가능) */
+        .progress-fill-b {
+            height: 100%;
+            background: #CFC5B8; /* primary-color보다 연한 색상 */
+            transition: width 0.3s ease;
+        }
+
+
+        .vote-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 600;
             color: #666;
         }
 
-        .stats {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-size: 13px;
+        .vote-info strong {
+            color: var(--primary-color);
         }
 
-        .stat {
-            flex: 1;
-            padding: 8px;
-            background: #e8f0fe;
-            border-radius: 8px;
-            text-align: center;
-            color: #667eea;
-            font-weight: bold;
-        }
 
         .view-btn {
             width: 100%;
             padding: 10px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
+            background: #F4F4F4; /* 버튼 배경을 뉴트럴하게 */
+            color: var(--primary-color); /* 텍스트는 primary color */
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             transition: all 0.3s ease;
+            margin-top: 15px;
         }
 
         .view-btn:hover {
-            background: #764ba2;
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
 
         .empty-message {
             text-align: center;
-            color: white;
+            background: var(--card-background);
+            color: var(--text-color);
             font-size: 18px;
             padding: 40px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
+<div class="header-nav">
+    <a href="/questions" class="active">All Questions</a>
+    <a href="/questions/new">Ask a Question</a>
+    <a href="/questions/random">Random Question</a>
+</div>
+
 <div class="container">
-    <h1>🤔 Either Questions</h1>
+    <h1>🗳️ 당신의 선택은?</h1>
 
     <div class="button-container">
         <a href="/questions/new" class="btn">➕ 새 질문 생성</a>
     </div>
 
     <div th:if="${questions.isEmpty()}" class="empty-message">
-        질문이 없습니다. 새 질문을 생성해주세요!
+        질문이 없습니다. <a href="/questions/new" style="color:var(--primary-color); font-weight:bold; text-decoration:none;">새 질문을 생성</a>해주세요!
     </div>
 
     <div th:if="${!questions.isEmpty()}" class="questions-grid">
         <div th:each="question : ${questions}" class="question-card">
             <a th:href="@{/questions/{id}(id=${question.id})}">
-                <div class="question-title" th:text="${question.title}"></div>
+                <div class="question-title" th:text="${question.title}">질문 제목</div>
 
                 <div class="options">
                     <div class="option">
-                        <strong>A:</strong> <span th:text="${#strings.abbreviate(question.optionA, 30)}"></span>
+                        <strong>A:</strong> <span th:text="${#strings.abbreviate(question.optionA, 25)}">옵션 A 내용</span>
                     </div>
                     <div class="option">
-                        <strong>B:</strong> <span th:text="${#strings.abbreviate(question.optionB, 30)}"></span>
+                        <strong>B:</strong> <span th:text="${#strings.abbreviate(question.optionB, 25)}">옵션 B 내용</span>
                     </div>
                 </div>
 
-                <div class="stats">
-                    <div class="stat">
-                        A: <span th:text="${question.countA}"></span> (<span th:text="${#numbers.formatDecimal(question.percentageA, 1, 1)}"></span>%)
+                <div class="stats-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill-a"
+                             th:style="'width: ' + ${question.percentageA} + '%'">
+                        </div>
+                        <div class="progress-fill-b"
+                             th:style="'width: ' + ${question.percentageB} + '%'">
+                        </div>
                     </div>
-                    <div class="stat">
-                        B: <span th:text="${question.countB}"></span> (<span th:text="${#numbers.formatDecimal(question.percentageB, 1, 1)}"></span>%)
+
+                    <div class="vote-info">
+                        <span style="color:var(--primary-color);">A: <strong th:text="${#numbers.formatDecimal(question.percentageA, 1, 1)} + '%'"></strong> (<span th:text="${question.countA}"></span>표)</span>
+                        <span>총 <strong th:text="${question.totalCount}"></strong>명 참여</span>
+                        <span style="color:#666;">B: <strong th:text="${#numbers.formatDecimal(question.percentageB, 1, 1)} + '%'"></strong> (<span th:text="${question.countB}"></span>표)</span>
                     </div>
                 </div>
             </a>
 
-            <button class="view-btn" onclick="location.href='/questions/' + this.closest('.question-card').querySelector('a').href.split('/').pop()">
-                자세히 보기
+            <button class="view-btn"
+                    th:onclick="|location.href='@{/questions/{id}(id=${question.id})}'|">
+                자세히 보기 및 투표
             </button>
         </div>
     </div>

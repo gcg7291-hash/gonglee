@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>질문 생성</title>
+    <title>질문 생성 | gonglee A/B</title>
     <style>
+        :root {
+            /* 로고에서 영감을 받은 따뜻한 베이지/골드 색상 */
+            --primary-color: #A68B5E;
+            /* 은은한 배경색 (Off-white/Light Gray) */
+            --background-color: #F8F8F8;
+            /* 깨끗한 배경색 */
+            --card-background: #FFFFFF;
+            /* 얇은 선 색상 */
+            --border-color: #E0E0E0;
+            /* 텍스트 색상 */
+            --text-color: #333333;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,31 +26,66 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--background-color);
             min-height: 100vh;
             padding: 40px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            color: var(--text-color);
+        }
+
+        /* --- 네비게이션 바 (Stitch 요구사항 반영) --- */
+        .header-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-background);
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .header-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.2s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+        .header-nav a:hover, .header-nav a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
         }
 
         .container {
             max-width: 500px;
             width: 100%;
+            /* 네비게이션 높이 고려 */
+            margin-top: 80px;
         }
 
         .form-container {
-            background: white;
-            border-radius: 15px;
+            background: var(--card-background);
+            /* 날카로운 모서리 (Sharp Corners) 강조 */
+            border-radius: 4px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            /* 은은한 그림자 (Subtle Shadow) */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            color: #333;
+            color: var(--primary-color);
             margin-bottom: 30px;
             text-align: center;
             font-size: 28px;
+            /* 얇은 선 무드에 맞게 두께 조절 */
+            font-weight: 300;
         }
 
         form {
@@ -53,16 +101,18 @@
         }
 
         label {
-            color: #333;
-            font-weight: bold;
+            color: var(--text-color);
+            font-weight: 600;
             font-size: 14px;
         }
 
         input[type="text"],
         textarea {
             padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            /* 얇은 기하학적 선 (Thin Geometric Line) */
+            border: 1px solid var(--border-color);
+            /* 날카로운 모서리 */
+            border-radius: 4px;
             font-size: 16px;
             font-family: inherit;
             transition: all 0.3s ease;
@@ -71,8 +121,9 @@
         input[type="text"]:focus,
         textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            /* 프라이머리 색상으로 포커스 테두리 */
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
         }
 
         textarea {
@@ -90,10 +141,11 @@
         .btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            /* 날카로운 모서리 */
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             transition: all 0.3s ease;
             flex: 1;
             text-decoration: none;
@@ -101,24 +153,27 @@
             display: inline-block;
         }
 
+        /* 프라이머리 (베이지/골드) 버튼 스타일 */
         button[type="submit"] {
-            background: #667eea;
+            background: var(--primary-color);
             color: white;
+            /* 얇은 선 무드에 맞게 두께 조절 */
+            font-weight: 500;
         }
 
         button[type="submit"]:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(166, 139, 94, 0.4);
         }
 
         .btn-cancel {
-            background: #f0f0f0;
-            color: #333;
+            background: var(--border-color);
+            color: var(--text-color);
         }
 
         .btn-cancel:hover {
-            background: #e0e0e0;
+            background: #D0D0D0;
         }
 
         .help-text {
@@ -129,32 +184,38 @@
     </style>
 </head>
 <body>
+<div class="header-nav">
+    <a href="/questions">All Questions</a>
+    <a href="/questions/new" class="active">Ask a Question</a>
+    <a href="/questions/random">Random Question</a>
+</div>
+
 <div class="container">
     <div class="form-container">
-        <h1>✍️ 새 질문 생성</h1>
+        <h1>✨ A vs B</h1>
 
         <form action="/questions" method="POST">
             <div class="form-group">
                 <label for="title">질문 제목</label>
-                <input type="text" id="title" name="title" placeholder="예: 커피 vs 차" required>
-                <div class="help-text">질문의 제목을 입력하세요</div>
+                <input type="text" id="title" name="title" placeholder="A vs B 테스트 주제를 명확하게 작성해주세요." required>
+                <div class="help-text">이 질문은 사용자들에게 표시될 메인 제목입니다.</div>
             </div>
 
             <div class="form-group">
-                <label for="optionA">옵션 A</label>
-                <input type="text" id="optionA" name="optionA" placeholder="예: 커피" required>
-                <div class="help-text">첫 번째 선택지를 입력하세요</div>
+                <label for="optionA">옵션 A (첫 번째 선택지)</label>
+                <input type="text" id="optionA" name="optionA" placeholder="예: '짜장면'" required>
+                <div class="help-text">사용자가 선택할 옵션 A에 대한 설명입니다.</div>
             </div>
 
             <div class="form-group">
-                <label for="optionB">옵션 B</label>
-                <input type="text" id="optionB" name="optionB" placeholder="예: 차" required>
-                <div class="help-text">두 번째 선택지를 입력하세요</div>
+                <label for="optionB">옵션 B (두 번째 선택지)</label>
+                <input type="text" id="optionB" name="optionB" placeholder="예: '짬뽕'" required>
+                <div class="help-text">사용자가 선택할 옵션 B에 대한 설명입니다.</div>
             </div>
 
             <div class="button-group">
-                <button type="submit">✅ 생성하기</button>
-                <a href="/questions" class="btn btn-cancel">❌ 취소</a>
+                <button type="submit">✨ 생성 하기</button>
+                <a href="/questions" class="btn btn-cancel"> 뒤로 가기</a>
             </div>
         </form>
     </div>

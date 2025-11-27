@@ -29,6 +29,9 @@ public class Question {
     
     @Column(nullable = false, length = 200)
     private String optionB;
+
+    private int countA;
+    private int countB;
     
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

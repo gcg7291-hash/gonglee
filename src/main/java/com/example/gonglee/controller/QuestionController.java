@@ -1,5 +1,6 @@
 package com.example.gonglee.controller;
 
+import com.example.gonglee.entity.Answer;
 import com.example.gonglee.entity.Question;
 import com.example.gonglee.service.AnswerService;
 import com.example.gonglee.service.QuestionService;
@@ -17,7 +18,8 @@ public class QuestionController {
     
     private final QuestionService questionService;
     private final AnswerService answerService;
-    
+
+
     @GetMapping
     public String getQuestions(Model model) {
         List<Question> questions = questionService.getAllQuestions();
@@ -43,6 +45,9 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String getQuestionDetail(@PathVariable Long id, Model model) {
         Question question = questionService.getQuestionById(id);
+        List<Answer> answers = question.getAnswers();
+        model.addAttribute("answers", answers);
+        model.addAttribute("answer", new Answer());
         model.addAttribute("question", question);
         return "questions/detail";
     }
@@ -61,4 +66,6 @@ public class QuestionController {
         Question question = questionService.getRandomQuestion();
         return "redirect:/questions/" + question.getId();
     }
+
+
 }
