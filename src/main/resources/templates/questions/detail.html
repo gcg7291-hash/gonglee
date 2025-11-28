@@ -332,7 +332,7 @@
                 <textarea id="content" name="content" placeholder="당신의 선택에 대한 이유를 적어주세요 (선택사항)"></textarea>
             </div>
 
-            <button type="submit">✅ 답변 제출 및 투표</button>
+            <button type="submit">✅ 답변 제출 및 투표 </button>
         </form>
     </div>
 
@@ -340,8 +340,8 @@
         총 <strong th:text="${question.totalCount}"></strong>명이 이 질문에 참여했습니다.
     </div>
 </div>
+<hr>
 <h3>댓글 목록</h3>
-
 <div th:each="a : ${answers}">
     <p th:text="${a.content}"></p>
     <hr>
